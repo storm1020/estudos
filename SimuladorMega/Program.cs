@@ -6,66 +6,46 @@ using System.Threading.Tasks;
 
 namespace SimuladorMega
 {
-    public class Jogo : Random
+    public class Jogo
     {
-        public int number = new Random().Next();
-        public Random rd = new Random();
+        public int quantidadeDeJogos;
+        public int quantidadeDeNumeros;
 
-        public void Jogar (string opcao)
-        {            
-            if (opcao == "6" || opcao == "7" || opcao == "8")
+        public static int CapturarQuantidadeDeJogos()
+        {
+            Console.WriteLine("Digite a quantidade de jogos: ");
+            return Convert.ToInt16(Console.ReadLine());
+        }
+
+        public static int CapturarQuantidadeDeNumeros()
+        {
+            Console.WriteLine("Digite a quantidade de números referente aos jogos: ");
+            return Convert.ToInt16(Console.ReadLine());
+        }
+
+        public void Jogar (int qtdeJogos, int qtdeNumeros)
+        {
+            List<int> numeros = new List<int>();
+            List<int> resultado = new List<int>();
+            Random rd = new Random();
+
+            while (qtdeJogos > 0)
             {
-                switch (opcao)
+                numeros = Enumerable.Range(1, 60).OrderBy(x => rd.Next()).Take(qtdeNumeros).ToList();
+
+                foreach (int item in numeros)
                 {
-                    case "6":
-                        int[] seisNumeros = new int[6];
-                        for (int i = 0; i < seisNumeros.Length; i++)
-                        {
-                            if (seisNumeros[i] != number)
-                            {
-                                seisNumeros[i] = rd.Next(0, 60);
-                            }
-                        }
-                        foreach (var item in seisNumeros)
-                        {
-                            Console.WriteLine("Seis números: " + item);
-                        }
-                        break;
-
-                    case "7":
-                        int[] seteNumeros = new int[7];
-                        for (int i = 0; i < seteNumeros.Length; i++)
-                        {
-                            if (seteNumeros[i] != number)
-                            {
-                                seteNumeros[i] = rd.Next(0, 60);
-                            }
-                        }
-                        foreach (var item in seteNumeros)
-                        {
-                            Console.WriteLine("Sete números: " + item);
-                        }
-                        break;
-                    case "8":
-                        int[] oitoNumeros = new int[8];
-                        for (int i = 0; i < oitoNumeros.Length; i++)
-                        {
-                            if (oitoNumeros[i] != number)
-                            {
-                                oitoNumeros[i] = rd.Next(0, 60);
-                            }
-                        }
-                        foreach (var item in oitoNumeros)
-                        {
-                            Console.WriteLine("Oito números: " + item);
-                        }
-                        break;
+                    resultado.Add(item);
                 }
+
+                Console.WriteLine(ExibirResultado(numeros));
+                qtdeJogos--;
             }
-            else
-            {
-                Console.WriteLine("Escolha entre 6, 7 ou 8 números.");
-            }
+        }
+
+        public string ExibirResultado(List<int> lista)
+        {
+            return string.Join(",", lista).ToString();
         }
     }
 
@@ -74,9 +54,27 @@ namespace SimuladorMega
         static void Main(string[] args)
         {
             Jogo jogo = new Jogo();
-            Console.WriteLine("Digite: 6 para SEIS números, 7 para SETE números, 8 para OITO números");
-            string retorno = Console.ReadLine();
-            jogo.Jogar(retorno);
+            int quantidadeDeJogos = Jogo.CapturarQuantidadeDeJogos();
+            int quantidadeDeNumeros = Jogo.CapturarQuantidadeDeNumeros();
+            jogo.Jogar(quantidadeDeJogos, quantidadeDeNumeros);
+
+            #region Estruturada
+            //List<int> numeros = new List<int>();
+            //List<int> resultado = new List<int>();
+
+            //Random rd = new Random();
+            //while (quantidadeDeJogos > 0)
+            //{ 
+            //    numeros = Enumerable.Range(1, 60).OrderBy(x => rd.Next()).Take(quantidadeDeNumeros).ToList();
+
+            //    foreach(int item in numeros)
+            //    {
+            //        resultado.Add(item);
+            //    }
+            //    Console.WriteLine(string.Join(", ", numeros));
+            //    quantidadeDeJogos--;
+            //}
+            #endregion
         }
     }
 }
